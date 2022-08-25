@@ -47,7 +47,7 @@
 #include <cbricks/pup/colorsensor.h>
 #include <stdio.h>
 
-pup_device_t *color_sensor;
+static pup_device_t *color_sensor;
 
 /*
  *  メインタスク
@@ -60,9 +60,8 @@ main_task(intptr_t exinf)
   if (color_sensor == NULL) {
     printf("XXX\n");
   } else {
-    printf("OK\n");
+    sta_cyc(COLOR_TASK_CYC);
   }
-  sta_cyc(COLOR_TASK_CYC);
   slp_tsk();
   assert(0);
 }

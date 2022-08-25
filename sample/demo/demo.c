@@ -40,18 +40,12 @@
  *  $Id: sample1.c 1237 2019-07-10 01:00:30Z ertl-hiro $
  */
 
-//#include <kernel.h>
 #include <t_syslog.h>
-//#include <t_stdlib.h>
-//#include "syssvc/serial.h"
-//#include "syssvc/syslog.h"
 #include "kernel_cfg.h"
 #include "demo.h"
 
 #include <pbsys/user_program.h>
 #include <pbsys/light.h>
-//#include <pbio/light.h>
-//#include <pbio/color.h>
 
 extern const uint8_t pb_font_5x5[95][5];
 
@@ -70,8 +64,8 @@ main_task(intptr_t exinf)
 }
 
 #include <stdio.h>
-char message[] = "SPIKE-RT ";
-char *p = message;
+static char message[] = "SPIKE-RT ";
+static char *p = message;
 void led_task(intptr_t exinf)
 {
   SYSTIM st;
