@@ -44,17 +44,25 @@
 #include "kernel_cfg.h"
 #include "touch.h"
 
+#include <pbsys/user_program.h>
 #include <cbricks/pup/forcesensor.h>
 #include <stdio.h>
+
+static pup_device_t *touch;
+static SYSTIM last;
+static void wait_for_touch(void)
+{
+  while (!pup_force_sensor_touched(touch)) ;
+  while ( pup_force_sensor_touched(touch)) ;
+}
 
 /*
  *  メインタスク
  */
-static pup_device_t *touch;
-static SYSTIM last;
 void
 main_task(intptr_t exinf)
 {
+  pbsys_user_program_prepare(NULL);
   dly_tsk(1000000); // Need quiet time...???
   touch = pup_force_sensor_get_device(PBIO_PORT_ID_D);
   if (touch == NULL) {
@@ -62,10 +70,22 @@ main_task(intptr_t exinf)
   } else {
     get_tim(&last);
     printf("Please touch the force sensor (PORT_D).\n");
+#ifdef CYC
     sta_cyc(TOUCH_TASK_CYC);
+#endif
   }
+#ifndef CYC
+  while (1) {
+    wait_for_touch();
+    get_tim(&last);
+    printf("%u: touched!\n", (unsigned int) last);
+  }
+#endif
   slp_tsk();
+#ifdef CYC
   stp_cyc(TOUCH_TASK_CYC);
+#endif
+  pbsys_user_program_unprepare();
   assert(0);
 }
 
