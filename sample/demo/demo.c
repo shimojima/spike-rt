@@ -46,8 +46,92 @@
 
 #include <pbsys/user_program.h>
 #include <pbsys/light.h>
+#include <pbio/port.h>
+#include <pbio/motor_process.h>
+#include <pbio/servo.h>
+#include <cbricks/pup/colorsensor.h>
+#include <cbricks/pup/forcesensor.h>
+#include <stdio.h>
 
 extern const uint8_t pb_font_5x5[95][5];
+
+static pbio_servo_t *arm_motor;
+static pbio_servo_t *right_motor;
+static pbio_servo_t *left_motor;
+static pup_device_t *color_sensor;
+static pup_device_t *touch_sensor;
+#if 0
+static pup_device_t *sonar_sensor;
+#endif
+
+#define RETRY_COUNT 3
+static pbio_servo_t *config_motor(pbio_port_id_t port, pbio_direction_t direction)
+{
+  pbio_servo_t *motor;
+  int status = pbio_motor_process_get_servo(port, &motor);
+  if (status != PBIO_SUCCESS) {
+    printf("[%c] error getting access to motor.\n", port);
+    slp_tsk();
+  }
+  fix16_t gear_ratio = F16C(1, 0);
+  bool reset_angle = false;
+  for (int i = 0; i < RETRY_COUNT; i++) {
+    status = pbio_servo_setup(motor, direction, gear_ratio, reset_angle);
+    if (status == PBIO_SUCCESS) break;
+    dly_tsk(1000000);
+  }
+  if (status != PBIO_SUCCESS) {
+    printf("[%c] error configuring motor: %d\n", port, status);
+    slp_tsk();
+  }
+  return motor;
+}
+
+static pup_device_t *config_color(pbio_port_id_t port)
+{
+  pup_device_t *color = pup_color_sensor_get_device(port);
+  if (color == NULL) {
+    printf("[%c] error configuring color sensor.\n", port);
+    slp_tsk();
+  }
+  return color;
+}
+
+static pup_device_t *config_touch(pbio_port_id_t port)
+{
+  pup_device_t *touch = pup_force_sensor_get_device(port);
+  if (touch == NULL) {
+    printf("[%c] error configuring touch sensor.\n", port);
+    slp_tsk();
+  }
+  return touch;
+}
+
+#if 0
+static pup_device_t *config_sonar(pbio_port_id_t port)
+{
+  return NULL;
+}
+#endif
+
+static void config_devices(void)
+{
+  dly_tsk(1000000); // 1 sec of quiet time before configuring the devices.
+  right_motor  = config_motor(PBIO_PORT_ID_B, PBIO_DIRECTION_CLOCKWISE);        // forward/backward: +/-
+  left_motor   = config_motor(PBIO_PORT_ID_E, PBIO_DIRECTION_COUNTERCLOCKWISE); // forward/backward: +/-
+  arm_motor    = config_motor(PBIO_PORT_ID_A, PBIO_DIRECTION_COUNTERCLOCKWISE); // up/down: +/-
+  color_sensor = config_color(PBIO_PORT_ID_C);
+  touch_sensor = config_touch(PBIO_PORT_ID_D);
+#if 0
+  sonar_sensor = config_sonar(PBIO_PORT_ID_F);
+#endif
+}
+
+static void wait_for_touch(void)
+{
+  while (!pup_force_sensor_touched(touch_sensor)) dly_tsk(100);
+  while ( pup_force_sensor_touched(touch_sensor)) dly_tsk(100);
+}
 
 /*
  *  メインタスク
@@ -56,9 +140,14 @@ void
 main_task(intptr_t exinf)
 {
   pbsys_user_program_prepare(NULL); // pbsys_processをユーザプログラム実行状態に遷移させる．
-  sta_cyc(LED_TASK_CYC);
-  slp_tsk();
+  config_devices();
+  printf("Devices configured successfully...\n");
+  sta_cyc(LED_TASK_CYC); // Start LED task to show all the devices are successfully configured.
+  wait_for_touch();
+  sta_cyc(RUN_TASK_CYC);
+  wait_for_touch();
   stp_cyc(LED_TASK_CYC);
+  stp_cyc(RUN_TASK_CYC);
   pbsys_user_program_unprepare();
   assert(0);
 }
@@ -75,4 +164,23 @@ void led_task(intptr_t exinf)
   pb_assert(pbio_light_matrix_set_rows(pbsys_hub_light_matrix, pb_font_5x5[*p - 32]));
   pb_assert(pbio_color_light_on(pbsys_status_light, PBIO_COLOR_YELLOW));
   p++; if (*p == '\0') p = message;
+}
+#define WHITE_BRIGHTNESS (100)
+#define BLACK_BRIGHTNESS (  0)
+#define STEERING_COEFF   (3.F)
+#define BASE_SPEED       (200)
+#define LEFT_EDGE        (-1)
+#define RIGHT_EDGE       (+1)
+void run_task(intptr_t exinf)
+{
+  int target      = (WHITE_BRIGHTNESS - BLACK_BRIGHTNESS) / 2;
+  int reflection  = pup_color_sensor_reflection(color_sensor);
+  int delta       = target - reflection;
+  int steering    = (int) ((double) delta * STEERING_COEFF);
+
+  int left_speed  = BASE_SPEED + steering * LEFT_EDGE;
+  int right_speed = BASE_SPEED - steering * LEFT_EDGE;
+
+  pbio_servo_run(right_motor, right_speed);
+  pbio_servo_run( left_motor,  left_speed);
 }

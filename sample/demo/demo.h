@@ -71,5 +71,6 @@
 
 extern void	main_task(intptr_t exinf);
 extern void	led_task(intptr_t exinf);
+extern void	run_task(intptr_t exinf);
 
 #endif /* TOPPERS_MACRO_ONLY */
