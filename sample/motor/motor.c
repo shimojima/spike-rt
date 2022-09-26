@@ -44,8 +44,8 @@
 #include "kernel_cfg.h"
 #include "motor.h"
 
-#include <pbio/motor_process.h>
 #include <pbio/servo.h>
+#include <pbio/tacho.h>
 #include <stdio.h>
 
 /*
@@ -55,14 +55,15 @@ void
 main_task(intptr_t exinf)
 {
   pbio_servo_t *motor;
+  pbio_tacho_t *tacho;
   pbio_error_t status;
   dly_tsk(1000000);
-  status = pbio_motor_process_get_servo(PBIO_PORT_ID_A, &motor);
+  status = pbio_motor_process_get_servo(PBIO_PORT_ID_B, &motor);
   if (status != PBIO_SUCCESS) {
     printf("Error getting access to motor: %d\n", status);
     slp_tsk();
   }
-  pbio_direction_t positive = PBIO_DIRECTION_COUNTERCLOCKWISE; // or PBIO_DIRECTION_CLOCKWISE
+  pbio_direction_t positive = PBIO_DIRECTION_CLOCKWISE; // or PBIO_DIRECTION_COUNTERCLOCKWISE
   fix16_t gear_ratio = F16C(1, 0);
   bool reset_angle = false;
   for (int i = 0; i < 3; i++) {
@@ -74,13 +75,35 @@ main_task(intptr_t exinf)
     printf("Error configuring motor: %d\n", status);
     slp_tsk();
   }
+  status = pbio_tacho_get(PBIO_PORT_ID_B, &tacho, positive, gear_ratio, reset_angle);
+  if (status != PBIO_SUCCESS) {
+    printf("Error configuring tacho meter: %d\n", status);
+    slp_tsk();
+  }
+  int angle = 0;
+  status = pbio_tacho_reset_angle(tacho, &angle, true);
+  if (status != PBIO_SUCCESS) {
+    printf("Error resetting tacho meter: %d\n", status);
+    slp_tsk();
+  }
   int speed = 360; // in deg/sec
   status = pbio_servo_run(motor, speed);
   if (status != PBIO_SUCCESS) {
     printf("Error running motor: %d\n", status);
     slp_tsk();
   }
-  dly_tsk(10000000);
+  long int _count = 0, _angle = 0, _rate = 0, _rotation = 0;
+  while (1) {
+    long int  count,  angle,  rate,  rotation;
+    pbio_tacho_get_count(tacho, &count);
+    pbio_tacho_get_angle(tacho, &angle);
+    pbio_tacho_get_rate(tacho, &rate);
+    pbio_tacho_get_angular_rate(tacho, &rotation);
+    printf("%ld (%ld) %ld (%ld) %ld (%ld) %ld (%ld)\n",
+           count, count-_count, angle, angle-_angle, rate, rate-_rate, rotation, rotation-_rotation);
+    _count = count; _angle = angle; _rate = rate; _rotation = rotation;
+    dly_tsk(1000000);
+  }
   status = pbio_servo_stop(motor, PBIO_DCMOTOR_COAST);
   if (status != PBIO_SUCCESS) {
     printf("Error stopping motor: %d\n", status);
