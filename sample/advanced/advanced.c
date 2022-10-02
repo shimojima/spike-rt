@@ -233,7 +233,17 @@ main_task(intptr_t exinf)
 
 void run_task(intptr_t exinf)
 {
-  linetrace(edge);
+  long int right_count, left_count;
+  pbio_tacho_get_count(right_motor.tacho, &right_count);
+  pbio_tacho_get_count(left_motor.tacho , &left_count);
+  if (right_count + left_count > 17*360*2) {
+    pbio_servo_stop(right_motor.servo, PBIO_DCMOTOR_COAST);
+    pbio_servo_stop(left_motor.servo , PBIO_DCMOTOR_COAST);
+    stp_cyc(RUN_TASK_CYC);
+    stp_cyc(LED_TASK_CYC);
+  } else {
+    linetrace(edge);
+  }
 }
 
 static char message[] = "SPIKE-RT ";
