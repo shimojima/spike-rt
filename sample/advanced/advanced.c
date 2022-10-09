@@ -55,29 +55,25 @@
 
 //#include <pbsys/user_program.h>
 
-typedef struct {
-  pbio_servo_t *servo;
-  pbio_tacho_t *tacho;
-} pbio_motor_t;
-static pbio_motor_t arm_motor;
-static pbio_motor_t right_motor;
-static pbio_motor_t left_motor;
+static pbio_servo_t *arm_motor;
+static pbio_servo_t *right_motor;
+static pbio_servo_t *left_motor;
 static pup_device_t *color_sensor;
 //static pup_device_t *touch_sensor;
 
 #define RETRY_COUNT 4
-static pbio_motor_t config_motor(pbio_port_id_t port, pbio_direction_t direction)
+static pbio_servo_t *config_motor(pbio_port_id_t port, pbio_direction_t direction)
 {
-  pbio_motor_t motor;
-  int status = pbio_motor_process_get_servo(port, &(motor.servo));
+  pbio_servo_t *motor;
+  int status = pbio_motor_process_get_servo(port, &motor);
   if (status != PBIO_SUCCESS) {
     printf("[%c] error getting access to motor.\n", port);
     slp_tsk();
   }
   fix16_t gear_ratio = F16C(1, 0);
-  bool reset_angle = false;
+  bool reset_angle = true;
   for (int i = 0; i < RETRY_COUNT; i++) {
-    status = pbio_servo_setup(motor.servo, direction, gear_ratio, reset_angle);
+    status = pbio_servo_setup(motor, direction, gear_ratio, reset_angle);
     if (i == 0 && status == PBIO_ERROR_NO_DEV) {
       // try one more time
     } else if (status != PBIO_ERROR_AGAIN) break;
@@ -85,17 +81,6 @@ static pbio_motor_t config_motor(pbio_port_id_t port, pbio_direction_t direction
   }
   if (status != PBIO_SUCCESS) {
     printf("[%c] error configuring motor: %s\n", port, pbio_error_str(status));
-    slp_tsk();
-  }
-  status = pbio_tacho_get(port, &(motor.tacho), direction, gear_ratio, reset_angle);
-  if (status != PBIO_SUCCESS) {
-    printf("[%c] error configuring tacho: %s\n", port, pbio_error_str(status));
-    slp_tsk();
-  }
-  long int angle = 0;
-  status = pbio_tacho_reset_angle(motor.tacho, &angle, true);
-  if (status != PBIO_SUCCESS) {
-    printf("[%c] error resetting tacho: %s\n", port, pbio_error_str(status));
     slp_tsk();
   }
   return motor;
@@ -179,8 +164,8 @@ void linetrace(int edge)
   int left_speed  = BASE_SPEED + steering * edge;
   int right_speed = BASE_SPEED - steering * edge;
 
-  pbio_servo_run(right_motor.servo, right_speed);
-  pbio_servo_run( left_motor.servo,  left_speed);
+  pbio_servo_run(right_motor, right_speed);
+  pbio_servo_run( left_motor,  left_speed);
 
   old_reflection = reflection;
 }
@@ -225,8 +210,8 @@ main_task(intptr_t exinf)
   sta_cyc(RUN_TASK_CYC);
   wait_for_hub_buttons(HUB_BUTTON_CENTER);
   stp_cyc(RUN_TASK_CYC);
-  pbio_servo_stop(right_motor.servo, PBIO_DCMOTOR_COAST);
-  pbio_servo_stop( left_motor.servo, PBIO_DCMOTOR_COAST);
+  pbio_servo_stop(right_motor, PBIO_DCMOTOR_COAST);
+  pbio_servo_stop( left_motor, PBIO_DCMOTOR_COAST);
   stp_cyc(LED_TASK_CYC);
   pbsys_user_program_unprepare();
 }
@@ -234,11 +219,11 @@ main_task(intptr_t exinf)
 void run_task(intptr_t exinf)
 {
   long int right_count, left_count;
-  pbio_tacho_get_count(right_motor.tacho, &right_count);
-  pbio_tacho_get_count(left_motor.tacho , &left_count);
+  pbio_tacho_get_count(right_motor->tacho, &right_count);
+  pbio_tacho_get_count(left_motor->tacho , &left_count);
   if (right_count + left_count > 17*360*2) {
-    pbio_servo_stop(right_motor.servo, PBIO_DCMOTOR_COAST);
-    pbio_servo_stop(left_motor.servo , PBIO_DCMOTOR_COAST);
+    pbio_servo_stop(right_motor, PBIO_DCMOTOR_COAST);
+    pbio_servo_stop(left_motor , PBIO_DCMOTOR_COAST);
     stp_cyc(RUN_TASK_CYC);
     stp_cyc(LED_TASK_CYC);
   } else {
