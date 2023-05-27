@@ -29,6 +29,11 @@ SECTIONS
 		*(.rodata.*)
 	} > FLASH
 
+	.name :
+	{
+		*(.name)  /* customizable hub name */
+	} > FLASH
+
 	.ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) }
 	__exidx_start = .;
 	.ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) }
