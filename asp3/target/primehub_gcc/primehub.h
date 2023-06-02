@@ -68,17 +68,17 @@
 #ifndef TECSGEN
 #include "stm32f4xx_nucleo.h"
 #else /* !TECSGEN */
-#define UART9_BASE  0x40011800U
-#define UART9_IRQn  88
+#define UART5_BASE  0x40005000U
+#define UART5_IRQn  53
 #endif /* TECSGEN */
 #endif /* TOPPERS_MACRO_ONLY */
 
 /*
  *  USART関連の定義
  */
-#define USART_INTNO (UART9_IRQn + 16)
-#define USART_NAME  UART9
-#define USART_BASE  UART9_BASE 
+#define USART_INTNO (UART5_IRQn + 16)
+#define USART_NAME  UART5
+#define USART_BASE  UART5_BASE 
 
 /*
  *  ボーレート
@@ -95,21 +95,22 @@ usart_low_init(void) {
 	GPIO_InitTypeDef  GPIO_InitStruct;
 
 	/* Enable Clock */
+	__HAL_RCC_GPIOC_CLK_ENABLE();
 	__HAL_RCC_GPIOD_CLK_ENABLE();
-	__HAL_RCC_UART9_CLK_ENABLE();
+	__HAL_RCC_UART5_CLK_ENABLE();
   
 	/* UART TX GPIO pin configuration  */
-	GPIO_InitStruct.Pin       = GPIO_PIN_15;
+	GPIO_InitStruct.Pin       = GPIO_PIN_12;
 	GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull      = GPIO_PULLUP;
 	GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
-	GPIO_InitStruct.Alternate = GPIO_AF11_UART9;
+	GPIO_InitStruct.Alternate = GPIO_AF8_UART5;
 
-	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
     
 	/* UART RX GPIO pin configuration  */
-	GPIO_InitStruct.Pin = GPIO_PIN_14;
-	GPIO_InitStruct.Alternate = GPIO_AF11_UART9;
+	GPIO_InitStruct.Pin = GPIO_PIN_2;
+	GPIO_InitStruct.Alternate = GPIO_AF8_UART5;
     
 	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 }

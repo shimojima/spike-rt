@@ -34,6 +34,7 @@ enum {
   SIO_USB_FILENO = 3,
   SIO_BLUETOOTH_FILENO,
   SIO_TEST_FILENO,
+  SIO_UART_D_FILENO,
   SIO_UART_F_FILENO,
   SIO_UART_E_FILENO,
 };
@@ -46,8 +47,10 @@ static inline int _get_fd_from_sio_portid(ID portid) {
     return SIO_BLUETOOTH_FILENO;
   case SIO_TEST_PORTID:
     return SIO_TEST_FILENO;
+  case SIO_UART_D_PORTID:
+    return SIO_UART_D_FILENO;
   case SIO_UART_E_PORTID:
-    return SIO_UART_F_FILENO;
+    return SIO_UART_E_FILENO;
   case SIO_UART_F_PORTID:
     return SIO_UART_F_FILENO;
   }
@@ -69,6 +72,8 @@ static inline ID _get_sio_portid_from_fd(int fd) {
     return SIO_BLUETOOTH_PORTID;
   case SIO_TEST_FILENO:
     return SIO_TEST_PORTID;
+  case SIO_UART_D_FILENO:
+    return SIO_UART_D_PORTID;
   case SIO_UART_E_FILENO:
     return SIO_UART_E_PORTID;
   case SIO_UART_F_FILENO:

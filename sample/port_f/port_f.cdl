@@ -1,7 +1,7 @@
 /*
- *    サンプルプログラム(1)のコンポーネント記述ファイル
- *
- *  $Id: sample1.cdl 839 2017-10-17 02:48:52Z ertl-hiro $
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2022-2023 Embedded and Real-Time Systems Laboratory,
+ *                         Graduate School of Information Science, Nagoya Univ., JAPAN
  */
 /*
  *  カーネルオブジェクトの定義
@@ -129,14 +129,15 @@ cell tSerialAsyncPort SerialPortTest1 {
  *
  *  システムログタスクを外す場合には，以下のセルの組上げ記述を削除すれ
  *  ばよい．
+ *  TODO: LogTaskの優先度を上げても，USB経由での出力がうまく動作するようにする．
  */
 cell tLogTask LogTask {
-  priority  = 3;          /* システムログタスクの優先度 */
+  priority  = 4;          /* システムログタスクの優先度 */
   stackSize = LogTaskStackSize;  /* システムログタスクのスタックサイズ */
 
   /* シリアルインタフェースドライバとの結合 */
-  cSerialPort        = SerialPortUART_D.eSerialPort;
-  cnSerialPortManage = SerialPortUART_D.enSerialPortManage;
+  cSerialPort        = SerialPortUSB1.eSerialPort;
+  cnSerialPortManage = SerialPortUSB1.enSerialPortManage;
 
   /* システムログ機能との結合 */
   cSysLog = SysLog.eSysLog;
