@@ -6,7 +6,7 @@
 
 #include <t_syslog.h>
 #include "kernel_cfg.h"
-#include "button.h"
+#include "app.h"
 #include "spike/hub/button.h"
 
 static inline hub_button_t hub_buttons_pressed(hub_button_t buttons)

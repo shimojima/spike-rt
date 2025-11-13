@@ -11,7 +11,7 @@
 #include "syssvc/serial.h"
 #include "syssvc/syslog.h"
 #include "kernel_cfg.h"
-#include "led.h"
+#include "app.h"
 
 #include "spike/hub/light.h"
 #include "spike/hub/display.h"

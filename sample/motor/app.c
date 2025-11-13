@@ -12,7 +12,7 @@
 #include <serial/serial.h>
 #include <spike/hub/system.h>
 #include <spike/pup/motor.h>
-#include "motor.h"
+#include "app.h"
 
 /*
  *  モータを接続するポート

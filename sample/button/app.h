@@ -5,8 +5,8 @@
  *            Graduate School of Information Science, Nagoya Univ., JAPAN
  */
 
-#ifndef __BUTTON_H__
-#define __BUTTON_H__
+#ifndef __APP_H__
+#define __APP_H__
 
 #include <kernel.h>
 
@@ -37,4 +37,4 @@ extern void	main_task(intptr_t exinf);
 
 #endif /* TOPPERS_MACRO_ONLY */
 
-#endif /* __BUTTON_H__ */
+#endif /* __APP_H__ */
