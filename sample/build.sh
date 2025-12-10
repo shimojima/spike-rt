@@ -5,3 +5,5 @@
     cp -a asp.bin ..
   fi
 )
+
+explorer.exe .
