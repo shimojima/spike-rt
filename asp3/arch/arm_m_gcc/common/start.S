@@ -158,5 +158,6 @@ ALABEL(hardware_init_hook)
 	ATEXT
 	AALIGN(2)
 	AWEAK(software_init_hook)
+.type software_init_hook, %function
 ALABEL(software_init_hook)
 	bx   lr
