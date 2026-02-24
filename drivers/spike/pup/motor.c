@@ -117,7 +117,7 @@ int32_t pup_motor_get_power(pup_motor_t *motor) {
   int32_t voltage    = motor->dcmotor->voltage_now; // retrieve the cached value
   int32_t duty_cycle = pbio_battery_get_duty_from_voltage(voltage);
   duty_cycle = (duty_cycle + 5) / 10; // 0 .. 100
-  if (motor->dcmotor->direction == PUP_DIRECTION_COUNTERCLOCKWISE) {
+  if (motor->dcmotor->direction == PBIO_DIRECTION_COUNTERCLOCKWISE) {
     duty_cycle = -duty_cycle;         // -100 .. 0
   }
   return duty_cycle;

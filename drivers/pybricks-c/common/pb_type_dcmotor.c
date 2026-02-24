@@ -9,7 +9,7 @@
 
 #include <pbio/battery.h>
 #include <pbio/dcmotor.h>
-#include <pup_device.h>
+#include <pybricks/util_pb/pb_device.h>
 #include <cb_error.h>
 
 // pybricks._common.DCMotor.__init__

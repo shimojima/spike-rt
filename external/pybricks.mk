@@ -18,7 +18,7 @@ endif
 endif
 
 PYBRICKS_LIB := $(PYBRICKS_OBJDIR)/libpybricks.a
-PYBRICKS_INCLUDES := -I$(PYBRICKS_DIR)/lib/pbio/include \
+PYBRICKS_INCLUDES := -I$(PYBRICKS_DIR) -I$(PYBRICKS_DIR)/lib/pbio/include \
 										 -I$(PYBRICKS_DIR)/bricks/primehub_spike-rt \
 										 -I$(PYBRICKS_DIR)/lib/pbio/platform/prime_hub_spike-rt \
 										 -I$(PYBRICKS_DIR)/lib/lego \

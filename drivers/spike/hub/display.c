@@ -135,7 +135,7 @@ pbio_error_t hub_display_text(const char* text, uint32_t on, uint32_t off) {
 #define COLS 5
 pbio_error_t hub_display_text_scroll(const char* text, uint32_t delay) {
   // Make sure all characters are valid
-  char *p = text;
+  const char *p = text;
   int len = 0;
   while (*p) {
     if (*p < 32 || *p > 126) return PBIO_ERROR_INVALID_ARG;

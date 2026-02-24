@@ -16,6 +16,7 @@
 
 #include <pup_device.h>
 #include <cb_error.h>
+#include <kernel.h>
 
 /*
  * Notice: Logger is not used here though original Pybricks uses.
@@ -94,7 +95,6 @@ static int32_t get_gear_ratio(mp_obj_t gears_in) {
 pbio_error_t pybricks_c_common_motor_make_new(pbio_servo_t **p_srv, pbio_port_id_t port, pbio_direction_t positive_direction, bool reset_angle) {
 
     pbio_error_t err;
-    pbio_servo_t *srv;
 
     // Setup motor device and raise error if not connected or ready.
     check_pbio_error(pup_device_setup_motor(port, true));

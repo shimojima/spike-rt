@@ -61,7 +61,7 @@ static pbio_error_t set_mode(pbio_iodev_t *iodev, uint8_t new_mode) {
     pbio_error_t err;
 
     if (iodev->mode == new_mode) {
-        return;
+        return PBIO_SUCCESS;
     }
     
     while ((err = pbio_iodev_set_mode_begin(iodev, new_mode)) == PBIO_ERROR_AGAIN) {

@@ -17,7 +17,7 @@
  */
 
 pbio_error_t hub_button_is_pressed(hub_button_t *pressed) {
-  return pbdrv_button_is_pressed(pressed);
+  return pbdrv_button_is_pressed((pbio_button_flags_t *) pressed);
 }
 
 

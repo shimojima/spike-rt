@@ -17,7 +17,7 @@ extern struct process *pbsys_bluetooth_process;
 pbio_error_t hub_bluetooth_enable_advertising(void) {
   loc_cpu(); // TODO: Error Handling
   hub_bluetooth_advertising_enabled = true;
-  process_poll(&pbsys_bluetooth_process);
+  process_poll(pbsys_bluetooth_process);
   unl_cpu(); // TODO: Error Handling
   return PBIO_SUCCESS;
 }
@@ -25,7 +25,7 @@ pbio_error_t hub_bluetooth_enable_advertising(void) {
 pbio_error_t hub_bluetooth_disable_advertising(void) {
   loc_cpu(); // TODO: Error Handling
   hub_bluetooth_advertising_enabled = false;
-  process_poll(&pbsys_bluetooth_process);
+  process_poll(pbsys_bluetooth_process);
   unl_cpu(); // TODO: Error Handling
   return PBIO_SUCCESS;
 }
