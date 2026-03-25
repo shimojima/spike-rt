@@ -33,12 +33,12 @@ jobs:
       - name: Prepare build directory for Doxygen
         run: mkdir -p drivers/build-doxygen/
       - name: Build Doxygen-en
-        uses: mattnotmitt/doxygen-action@v1.9.4
+        uses: mattnotmitt/doxygen-action@v1.12.0
         with:
           working-directory: drivers/
           doxyfile-path: Doxyfile-en
       - name: Build Doxygen-ja
-        uses: mattnotmitt/doxygen-action@v1.9.4
+        uses: mattnotmitt/doxygen-action@v1.12.0
         with:
           working-directory: drivers/
           doxyfile-path: Doxyfile-ja
