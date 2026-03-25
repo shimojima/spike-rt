@@ -1,7 +1,7 @@
 [submodule "pybricks-micropython"]
 	path = external/libpybricks
 	url = https://github.com/shimojima/pybricks-micropython.git
-	branch = etrobo
+	branch = imu.v3.6.1
 [submodule "drivers/tlsf"]
 	path = drivers/tlsf
 	url = https://github.com/spike-rt/tlsf.git

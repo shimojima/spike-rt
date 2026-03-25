@@ -122,6 +122,11 @@
 #define INTPRI_I2C2_EV	(TMIN_INTPRI + 3)	/* 割込み優先度 */
 #define INTATR_I2C2_EV	TA_NULL				/* 割込み属性 */
 
+#define INHNO_EXTI4	(EXTI4_IRQn + 16)	/* 割込みハンドラ番号 */
+#define INTNO_EXTI4	(EXTI4_IRQn + 16)	/* 割込み番号 */
+#define INTPRI_EXTI4	(TMIN_INTPRI + 3)	/* 割込み優先度 */
+#define INTATR_EXTI4	TA_NULL				/* 割込み属性 */
+
 #define INHNO_EXTI9_5	(EXTI9_5_IRQn + 16)	/* 割込みハンドラ番号 */
 #define INTNO_EXTI9_5	(EXTI9_5_IRQn + 16)	/* 割込み番号 */
 #define INTPRI_EXTI9_5	(TMIN_INTPRI + 6)	/* 割込み優先度 */

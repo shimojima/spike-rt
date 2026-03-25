@@ -7,7 +7,7 @@ else
   PYTHON3=python3
 fi
 
-MPTOP=$HERE/../../external/libpybricks/micropython
+MPTOP=$HERE/../../asp3/target/primehub_gcc/
 DFU=$MPTOP/tools/dfu.py
 PYDFU=$MPTOP/tools/pydfu.py
 
