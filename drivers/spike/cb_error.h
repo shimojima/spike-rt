@@ -21,6 +21,7 @@
 
 #else
 
+#include <kernel.h>
 #include <spike/hub/display.h>
 #include <spike/hub/speaker.h>
 
