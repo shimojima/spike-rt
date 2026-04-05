@@ -39,7 +39,7 @@ static int find_closest(int heading, int theta[], int x[], int y[], int n) {
   for (int i = 0; i < n; i++) {
     if (heading == theta[i]) return i;
     if (heading < theta[i]) {
-      if (heading - theta[i-1] > theta[i] - heading) return i-1;
+      if (heading - theta[i-1] < theta[i] - heading) return i-1;
       return i;
     }
   }
