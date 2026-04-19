@@ -38,9 +38,11 @@ INCLUDES += -I$(DRIVERS_DIR) \
 #
 # Definitions for libcpp/spike
 #
+KERNEL_COBJS += app_init.o
 KERNEL_CXXOBJS += Button.o Clock.o IMU.o Light.o
 KERNEL_DIRS += $(DRIVERS_DIR)/libcpp \
 	       $(DRIVERS_DIR)/libcpp/spike
+INCLUDES += -I$(DRIVERS_DIR)/libcpp
 
 #
 #  Definitions for Pybricks.

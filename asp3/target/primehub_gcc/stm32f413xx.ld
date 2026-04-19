@@ -25,6 +25,14 @@ SECTIONS
 		*(.rodata.*)
 	} > FLASH
 
+	.init_array : ALIGN(4)
+	{
+		_init_array_start = .;
+		KEEP (*(SORT(.init_array.*)))
+		KEEP (*(.init_array))
+		_init_array_end = .;
+	} > FLASH
+
 	.ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) }
 	__exidx_start = .;
 	.ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) }
