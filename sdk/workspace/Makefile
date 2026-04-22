@@ -76,7 +76,7 @@ ifdef KERNEL_LIB
 	@echo "$(abspath $(PYBRICKS_LIB))" > $(BUILDDIR)/.PYBRICKS_LIB
 endif
 
-$(BUILDDIR)/Makefile:
+$(BUILDDIR)/Makefile:	Makefile $(MKFILE_DIR)/$(MKFILENAME)
 	@mkdir -p $(BUILDDIR)
 	@cd $(BUILDDIR) && \
 	$(SRCDIR)/configure.rb -T $(TARGET) $(OPTKERNEL) \
@@ -88,7 +88,7 @@ $(BUILDDIR)/Makefile:
 	  -m $(MKFILE_DIR)/$(MKFILENAME)
 
 ifdef KERNEL_LIB
-$(KERNEL_LIB)/Makefile:
+$(KERNEL_LIB)/Makefile:	Makefile $(COMMONDIR)/kernel.mk
 	@mkdir -p $(KERNEL_LIB)
 	@cd $(KERNEL_LIB) && \
 	$(SRCDIR)/configure.rb -T $(TARGET) -f -m $(COMMONDIR)/kernel.mk
