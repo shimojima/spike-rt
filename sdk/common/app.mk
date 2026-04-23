@@ -199,7 +199,7 @@ APPL_ASMOBJS :=
 ifdef USE_CXX
 	APPL_CXXOBJS := @(APPLOBJS)
 	APPL_COBJS :=
-        INCLUDES := $(INCLUDES) -I$(DRIVERS_DIR)/include/libcpp/spike
+        INCLUDES := $(INCLUDES) -I$(DRIVERS_DIR)/include/libcpp -I$(DRIVERS_DIR)/include/libcpp/spike
 else
 	APPL_COBJS := @(APPLOBJS)
 endif
