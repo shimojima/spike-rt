@@ -9,7 +9,7 @@
 
 #include <cstdint>
 extern "C" {
-#include <hub/display.h>
+#include <spike/hub/display.h>
 }
 
 namespace spikeapi {
