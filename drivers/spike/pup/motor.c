@@ -39,13 +39,13 @@ pup_motor_t *pup_motor_get_device(pbio_port_id_t port) {
     return NULL;
   }
 
-  for(int i = 0; i < 10; i++)
+  for(int i = 0; i < 200; i++)
   {
     err = pbio_servo_get_servo(port, &motor);
     if ((err == PBIO_SUCCESS) || (err != PBIO_ERROR_AGAIN)) {
       break;
     }
-    dly_tsk(1000*1000);
+    dly_tsk(50*1000);
   }
   if (err != PBIO_SUCCESS) {
     errlog("pup_motor_get_device()", port, err);
