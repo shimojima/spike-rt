@@ -1,4 +1,12 @@
+/*
+ * app_init.c
+ * Copyright (c) 2026 Embedded Technology Software Design Robot Contest
+ */
+
 #include "app_init.h"
+#include <libcpp/libcpp.h>
+
+static bool _app_init_task_completed = false;
 
 void _app_init_task(intptr_t unused) {
 
@@ -10,6 +18,12 @@ void _app_init_task(intptr_t unused) {
   while (fn < _init_array_end) {
     (*fn++)();
   }
+  _app_init_task_completed = true;
+  ext_tsk();
+}
+
+bool libcpp_is_ready(void) {
+  return _app_init_task_completed;
 }
 
 #if 0
