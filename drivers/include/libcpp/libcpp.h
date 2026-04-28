@@ -13,7 +13,7 @@ extern "C" {
 #include <stdbool.h>
 bool libcpp_is_ready(void);
 
-#define libcpp_sync(delay) while (!libcpp_is_ready()) dly_tsk(delay)
+#define libcpp_sync() while (!libcpp_is_ready()) dly_tsk(100*1000)
 
 #ifdef __cplusplus
 }
