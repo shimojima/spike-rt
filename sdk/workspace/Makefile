@@ -68,9 +68,9 @@ PYBRICKS_LIB =
 endif
 
 img: $(APPLDIRS) $(BUILDDIR)/Makefile $(DEPKERNEL)
-	@make -j $(JOB_NUM) -C $(BUILDDIR) && \
-	cp $(BUILDDIR)/$(OBJBINARY) $(WSPDIR) && \
-	echo "$(APPLDIRS)" > $(WSPDIR)/appdir
+	echo "$(APPLDIRS)" > $(WSPDIR)/appdir && \
+	make -j $(JOB_NUM) -C $(BUILDDIR) && \
+	cp $(BUILDDIR)/$(OBJBINARY) $(WSPDIR)
 ifdef KERNEL_LIB
 	@echo "$(abspath $(KERNEL_LIB))" > $(BUILDDIR)/.KERNEL_LIB
 	@echo "$(abspath $(PYBRICKS_LIB))" > $(BUILDDIR)/.PYBRICKS_LIB
@@ -131,5 +131,11 @@ endif
 cleanup:	
 	@rm -rf $(notdir $(OBJFILENAME)) $(OBJBINARY) firmware.dfu $(DEPKERNEL)
 
-.PHONY: usage img upload clean cleanup realclean
+distclean:
+	@$(foreach app,$(wildcard */build),make -C $(app) realclean;)
+	@$(foreach app,$(wildcard */build),rm -rf $(app);)
+	@rm appdir asp.bin
+	@rm -rf ../../build
+
+.PHONY: usage img upload clean cleanup realclean distclean
 	
