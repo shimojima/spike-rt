@@ -134,8 +134,7 @@ cleanup:
 distclean:
 	@$(foreach app,$(wildcard */build),make -C $(app) realclean;)
 	@$(foreach app,$(wildcard */build),rm -rf $(app);)
-	@rm appdir asp.bin
-	@rm -rf ../../build
+	@rm -rf appdir asp.bin ../../build
 
 .PHONY: usage img upload clean cleanup realclean distclean
 	
