@@ -6,7 +6,7 @@
 #include "app_init.h"
 #include <libcpp/libcpp.h>
 
-static bool _app_init_task_completed = false;
+static volatile bool _app_init_task_completed = false;
 
 void _app_init_task(intptr_t unused) {
 
@@ -24,6 +24,10 @@ void _app_init_task(intptr_t unused) {
 
 bool libcpp_is_ready(void) {
   return _app_init_task_completed;
+}
+
+void _app_sync_task(intptr_t unused) {
+  while (! libcpp_is_ready()) ; // spin-loop to block user tasks from running; do not use dly_tsk()
 }
 
 #if 0
