@@ -68,7 +68,10 @@ PYBRICKS_LIB =
 endif
 
 img: $(APPLDIRS) $(BUILDDIR)/Makefile $(DEPKERNEL)
-	echo "$(APPLDIRS)" > $(WSPDIR)/appdir && \
+ifneq (,$(wildcard HUB_NAME))
+	@$(COMMONDIR)/check_hub-name.sh HUB_NAME $(BUILDDIR)/HUB_NAME
+endif
+	@echo "$(APPLDIRS)" > $(WSPDIR)/appdir && \
 	make -j $(JOB_NUM) -C $(BUILDDIR) && \
 	cp $(BUILDDIR)/$(OBJBINARY) $(WSPDIR)
 ifdef KERNEL_LIB

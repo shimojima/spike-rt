@@ -25,6 +25,11 @@ SECTIONS
 		*(.rodata.*)
 	} > FLASH
 
+	.name :
+	{
+		*(.name)
+	} > FLASH
+
 	.init_array : ALIGN(4)
 	{
 		_init_array_start = .;
