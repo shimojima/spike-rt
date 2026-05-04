@@ -8,7 +8,7 @@
 ## ソースコードの入手
 以下により、ソースコードをクローンする。
 ```bash
-git clone https://github.com/shimojima/spike-rt.git -b etrobo
+git clone https://github.com/shimojima/spike-rt.git
 ```
 以下、特に断りの無い限りトップディレクトリが`spike-rt` のディレクトリであるとする。
 また、アプリケーション・ソースコードのディレクトリが `spike-rt/sdk/workspace/$appdir`に配置されているとする。
@@ -42,6 +42,12 @@ make clean
 ```bash
 cd ~/spike-rt/sdk/workspace
 make realclean 
+```
+
+また、（git pullなどして、asp3, drivers, external配下のファイルが更新された場合などに）sdk/workspace以下のすべてのプロジェクトに対して realclean するには：
+```bash
+cd ~/spike-rt/sdk/workspace
+make distclean 
 ```
 
 ## 書き込み
