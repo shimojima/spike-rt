@@ -55,6 +55,8 @@ CDL_DIR := $(APPLDIRS)
 ifeq (,$(wildcard $(CDL_DIR)/$(CDLFILE)))
 CDL_DIR := $(COMMONDIR)
 CDLFILE := app.cdl
+else
+CDL_DIR := ..
 endif
 
 ifdef KERNEL_LIB
