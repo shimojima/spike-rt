@@ -98,3 +98,7 @@ SPIKE-RTでは，Pybricksのデバイスドライバを再利用している．
 
 Pybricksの[Web IDE](https://beta.pybricks.com/)は，Firefox等には対応していない．
 Google ChromeやChromiumブラウザを使用する．
+
+接続時のデバイス名は、Pybricks Hub に設定されている。変更したい場合は、sdk/workspace/HUB_NAME
+というファイルを作り新しいデバイス名を書いておくと、asp.binファイル生成時に置き換えられる。
+デバイス名は、15文字以内の半角英数字・記号とする。
