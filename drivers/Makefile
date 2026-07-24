@@ -29,8 +29,8 @@ KERNEL_DIRS += $(DRIVERS_DIR)/spike \
 							 $(DRIVERS_DIR)/spike/hub \
 							 $(DRIVERS_DIR)/spike/pup
 
-KERNEL_COBJS += system.o light.o display.o display_fonts.o button.o battery.o imu.o speaker.o bluetooth.o
-KERNEL_COBJS += pup_device.o ultrasonicsensor.o colorsensor.o forcesensor.o motor.o
+KERNEL_COBJS += hub_system.o hub_light.o hub_display.o hub_display_fonts.o hub_button.o hub_battery.o hub_imu.o hub_speaker.o hub_bluetooth.o
+KERNEL_COBJS += pup_device.o pup_ultrasonicsensor.o pup_colorsensor.o pup_forcesensor.o pup_motor.o
 
 INCLUDES += -I$(DRIVERS_DIR) \
 						-I$(DRIVERS_DIR)/spike \
@@ -39,7 +39,7 @@ INCLUDES += -I$(DRIVERS_DIR) \
 # Definitions for libcpp/spike
 #
 KERNEL_COBJS += app_init.o
-KERNEL_CXXOBJS += Button.o Clock.o IMU.o Light.o
+KERNEL_CXXOBJS += spikeapi_Button.o spikeapi_Clock.o spikeapi_IMU.o spikeapi_Light.o
 KERNEL_DIRS += $(DRIVERS_DIR)/libcpp \
 	       $(DRIVERS_DIR)/libcpp/spike
 INCLUDES += -I$(DRIVERS_DIR)/libcpp
